@@ -9,9 +9,42 @@
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="css/swiper.min.css">
     <link rel="stylesheet" href="css/index.css">
+    <style>
+        .mask {
+            position: fixed;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            background:rgba(0,0,0,.6);
+            z-index:10;
+            line-height: 100%;
+            text-align: center;
+            color:#fff;
+            font-size:16px;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn {
+            width:100px;
+            height:40px;
+            line-height: 40px;
+            border:1px solid #fff;
+            color:#fff;
+            text-align: center;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 
 <body>
+
+    <div class="mask">
+           <p>亲，请锁定旋转，横屏体验奥。（前端太菜了0.0"）</p>
+           <div class="btn">OK</div>
+    </div>
     <!-- Swiper -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -68,6 +101,20 @@
     <script src="./js/index.js"></script>
     <!-- Initialize Swiper -->
     <script>
+
+        if(localStorage.getItem("first")){
+            $('.mask').hide();
+        }else {
+            $('.mask').show();
+        }
+
+        $('.btn').on('click',function() {
+            localStorage.setItem('first', true);
+            $('.mask').animate({
+                "left":-10000,
+                "right":10000
+            },1000)
+        })
     </script>
 </body>
 
