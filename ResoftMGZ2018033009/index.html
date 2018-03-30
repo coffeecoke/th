@@ -12,29 +12,34 @@
     <style>
         .mask {
             position: fixed;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            background:rgba(0,0,0,.6);
-            z-index:10;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, .6);
+            z-index: 10;
             line-height: 100%;
             text-align: center;
-            color:#fff;
-            font-size:16px;
-            display:flex;
+            color: #fff;
+            font-size: 16px;
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background: url('images/mask.png');
+            background-size: 100% auto;
         }
+
         .btn {
-            width:100px;
-            height:40px;
-            line-height: 40px;
-            border:1px solid #fff;
-            color:#fff;
-            text-align: center;
-            border-radius: 4px;
+            width: 100px;
+            height: 40px;
+            background: url('images/pointer.gif') center no-repeat;
+            background-size: 100% auto;
+            position: absolute;
+            bottom: 32px;
+            left: 0;
+            transform: rotate(90deg);
+            -webkit-transform: rotate(90deg);
         }
     </style>
 </head>
@@ -42,17 +47,19 @@
 <body>
 
     <div class="mask">
-           <p>亲，请锁定旋转，横屏体验奥。前端小伙太菜了0.0"）</p>
-           <div class="btn">OK</div>
+
+        <div class="btn">
+
+        </div>
     </div>
     <!-- Swiper -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
-               <img src="./imgs/main/images/main_01.jpg" />
+                <img src="./imgs/main/images/main_01.jpg" />
             </div>
             <div class="swiper-slide">
-                <a href="./html/zhangfu.html" style="display:block">
+                <a href="./html/zhangfu.html">
                     <img src="./imgs/main/images/main_02.jpg" />
                 </a>
             </div>
@@ -105,30 +112,45 @@
 
 
     <script>
-
-    title = '鑫声杂志第九期'; // 分享标题
-    desc = '《鑫声》驾到！身在职场，我到底为谁工作？“金牌销售”来做客，畅谈革新后的市场营销部……精彩不止这些，快来翻阅吧！'; // 分享描述
-    link = 'http://weixin.chinaresoft.com/resoftwechat/pages/ResoftMGZ2018033009/index.html'; // 分享链接
-    imgUrl = 'http://weixin.chinaresoft.com/resoftwechat/pages/ResoftMGZ2018033009/images/share.png'; // 分享图标
-
-
-    $(function () {
-        $.post("http://weixin.chinaresoft.com/resoftwechat/wc/magazine/RWA_updateUIMagazineViewLog?uimgzSN=2018Y(01-03)M09I", null, function(result){});
-    });
+        title = '鑫声杂志第九期'; // 分享标题
+        desc = '《鑫声》驾到！身在职场，我到底为谁工作？“金牌销售”来做客，畅谈革新后的市场营销部……精彩不止这些，快来翻阅吧！'; // 分享描述
+        link = 'http://weixin.chinaresoft.com/resoftwechat/pages/ResoftMGZ2018033009/index.html'; // 分享链接
+        imgUrl = 'http://weixin.chinaresoft.com/resoftwechat/pages/ResoftMGZ2018033009/images/share.png'; // 分享图标
 
 
-        if(localStorage.getItem("first")){
+        $(function() {
+            $.post("http://weixin.chinaresoft.com/resoftwechat/wc/magazine/RWA_updateUIMagazineViewLog?uimgzSN=2018Y(01-03)M09I", null, function(result) {});
+        });
+
+
+        if (localStorage.getItem("first")) {
             $('.mask').hide();
-        }else {
+        } else {
             $('.mask').show();
         }
 
-        $('.btn').on('click',function() {
-            localStorage.setItem('first', true);
-            $('.mask').animate({
-                "left":-10000,
-                "right":10000
-            },1000)
+        //获取接触屏幕时的X和Y
+        $('.mask').bind('touchstart',function(e){
+            startX = e.originalEvent.changedTouches[0].pageX,
+            startY = e.originalEvent.changedTouches[0].pageY;
+        });
+        $('.mask').bind('touchmove',function(e){
+    //获取滑动屏幕时的X,Y
+            endX = e.originalEvent.changedTouches[0].pageX,
+            endY = e.originalEvent.changedTouches[0].pageY;
+            var distanceX = endX - startX;
+            var distanceY = endY - startY;
+            if (Math.abs(distanceX) < Math.abs(distanceY) && distanceY < 0) {
+                $('.mask').animate({
+                    "top": -10000,
+                    "bottom":10000
+                }, 1000)
+                localStorage.setItem('first', true);
+            }
+        })
+        $('.mask').on('touchmove', function() {
+
+
         })
     </script>
 </body>
